@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
     
         <div className="space-y-6">
-          <h2 className="text-2xl font-black tracking-tighter">ETHIO<span className="text-yellow-500">SUQ</span></h2>
+          <h2 className="text-2xl font-black tracking-tighter">TANA<span className="text-yellow-500">GEBEYA</span></h2>
           <p className="text-slate-400 text-sm leading-relaxed">
             The most reliable online shopping management system in Ethiopia. Digitalizing your shopping experience with efficiency and security.
           </p>
@@ -48,7 +48,7 @@ export default function Footer() {
 
       <div className="border-t border-slate-800 py-8">
         <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-          <p>© 2026 SMS ETHIOSUQ. All rights reserved.</p>
+          <p>© 2026 SMS TANA-GEBEYA. All rights reserved.</p>
           <div className="flex space-x-6">
             <span className="hover:text-slate-300 cursor-pointer">Terms of Service</span>
             <span className="hover:text-slate-300 cursor-pointer">Privacy Policy</span>
