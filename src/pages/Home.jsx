@@ -7,17 +7,16 @@ import CategorySidebar from '../features/catalog/CategorySidebar';
 
 export default function Home() {
   const [products] = useState([
-    { id: 1, name: "G-Tab 10000mAh Power Bank Fast Charge", price: 3999, oldPrice: 4500, category: "Power Bank", image: "https://via.placeholder.com/200" },
-    { id: 2, name: "HainoTeko SQ-15 Smartwatch Series", price: 6500, category: "Smartwatches", image: "https://via.placeholder.com/200" },
-    { id: 3, name: "4K WiFi Sports Waterproof Camera", price: 11000, category: "Cameras", image: "https://via.placeholder.com/200" },
-    { id: 4, name: "Bitvae Toothbrush Sterilizer & Holder", price: 4500, category: "Health", image: "https://via.placeholder.com/200" },
-    { id: 5, name: "Premium Toilet Storage Rack", price: 2200, category: "Home", image: "https://via.placeholder.com/200" },
-    { id: 6, name: "Wireless Bluetooth Speaker Bass", price: 3500, category: "Audio", image: "https://via.placeholder.com/200" },
-    { id: 7, name: "Smart LED Desk Lamp", price: 2100, category: "Office", image: "https://via.placeholder.com/200" },
-    { id: 8, name: "Ergonomic Office Chair", price: 18500, category: "Furniture", image: "https://via.placeholder.com/200" },
+    { id: 1, name: "G-Tab 10000mAh Power Bank Fast Charge", price: 3999, oldPrice: 4500, category: "Power Bank", image: "/powerbank.jpg" },
+    { id: 2, name: "HainoTeko SQ-15 Smartwatch Series", price: 6500, category: "Smartwatches", image: "/smart-watch.jpg" },
+    { id: 3, name: "4K WiFi Sports Waterproof Camera", price: 11000, category: "Cameras", image: "/camera.jpg" },
+    { id: 4, name: "Bitvae Toothbrush Sterilizer & Holder", price: 4500, category: "Health", image: "/toothbrush.jpg" },
+    { id: 5, name: "Premium Toilet Storage Rack", price: 2200, category: "Home", image: "/tisue-table.jpg" },
+    { id: 6, name: "Wireless Bluetooth Speaker Bass", price: 3500, category: "Audio", image: "/bluetooth-speaker.jpg" },
+    { id: 7, name: "Smart LED Desk Lamp", price: 2100, category: "Office", image: "/lamp.jpg" },
+    { id: 8, name: "Ergonomic Office Chair", price: 18500, category: "Furniture", image: "/desk-revelted.jpg" },
   ]);
 
-  // --- Scroll & Dots Logic ---
   const scrollRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -26,7 +25,6 @@ export default function Home() {
       const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
       const maxScrollLeft = scrollWidth - clientWidth;
       
-      // Prevent division by zero if not scrollable
       if (maxScrollLeft <= 0) return;
 
       const percentage = scrollLeft / maxScrollLeft;
@@ -62,7 +60,7 @@ export default function Home() {
     <div className="bg-[#f4f4f4] min-h-screen font-sans text-slate-800">
       <div className="max-w-[1440px] mx-auto px-4 py-6">
         
-        {/* --- 1. TOP SECTION (SIDEBAR + 3-GRID PROMOS) --- */}
+        {/* SIDEBAR  */}
         <div className="flex flex-col lg:flex-row gap-4 mb-6">
           <aside className="hidden lg:block lg:w-1/4 bg-white border border-gray-200">
             <CategorySidebar />
@@ -79,7 +77,7 @@ export default function Home() {
                   Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
                 </button>
               </div>
-              <img src="https://via.placeholder.com/150" alt="banner" className="absolute right-2 bottom-4 w-36 group-hover:scale-110 transition-transform" />
+              <img src="/limited-offer.jpg" alt="banner" className="absolute right-2 bottom-4 w-36 group-hover:scale-110 transition-transform" />
             </div>
 
             <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden">
@@ -87,7 +85,7 @@ export default function Home() {
               <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
                 Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
               </button>
-              <img src="https://via.placeholder.com/180" alt="appliances" className="absolute right-0 bottom-4 w-40" />
+              <img src="/gadgets.jpg" alt="appliances" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
             </div>
 
             <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden">
@@ -95,12 +93,12 @@ export default function Home() {
               <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
                 Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
               </button>
-              <img src="https://via.placeholder.com/180" alt="gadgets" className="absolute right-0 bottom-4 w-44" />
+              <img src="/apple-collection.jpg" alt="gadgets" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
             </div>
           </div>
+          
         </div>
-
-        {/* --- 2. SERVICE HIGHLIGHTS BAR --- */}
+          
         <div className="grid grid-cols-2 md:grid-cols-5 gap-0 bg-white border border-gray-200 mb-8 divide-x divide-gray-100">
           {[
             { icon: <Truck />, title: "Delivery 200BR", sub: "IN ADDIS ABABA" },
@@ -119,7 +117,6 @@ export default function Home() {
           ))}
         </div>
 
-        {/* --- 3. SHOWCASE SECTION --- */}
         <div className="bg-white border border-gray-200 mb-10">
           <div className="flex items-center justify-between border-b border-gray-100 p-4 bg-gray-50/50">
             <h3 className="font-bold text-lg text-slate-700 uppercase flex items-center gap-2">
@@ -165,7 +162,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* --- 4. TANA GEBEYA BEST COLLECTIONS (Smooth Scroll + Dots) --- */}
+        {/*  BEST COLLECTIONS */}
         <div className="bg-white border border-gray-200">
           <div className="p-4 border-b border-gray-100 flex justify-between items-center">
             <h3 className="font-bold text-slate-700 uppercase tracking-tight">TanaGebeya Best Collections</h3>

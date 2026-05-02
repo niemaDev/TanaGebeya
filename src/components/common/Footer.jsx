@@ -40,9 +40,7 @@ export default function Footer() {
         <div>
           <h4 className="text-lg font-bold mb-6 border-b border-slate-700 pb-2">System Admin</h4>
           <p className="text-slate-400 text-sm mb-4 italic">Internal portal for authorized staff only.</p>
-          <Link to="/admin" className="inline-block bg-slate-800 hover:bg-slate-700 text-slate-300 px-6 py-2 rounded-lg text-xs font-bold uppercase transition">
-            Admin Dashboard
-          </Link>
+          
         </div>
       </div>
 

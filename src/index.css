@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+ /* Prevent the entire page from bouncing */
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-y: none; /* This removes the bounce/pull-to-refresh effect */
+}
