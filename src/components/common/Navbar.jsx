@@ -127,14 +127,9 @@ export default function Navbar() {
       {/*  CATEGORY & SEARCH BAR */}
       <div className="bg-yellow-400 py-3 shadow-sm z-10">
         <div className="container mx-auto px-4 flex items-center gap-4">
-          <button 
-            onClick={() => setIsDrawerOpen(true)}
-            className="hidden lg:flex items-center justify-between w-52 text-sm font-bold px-2 py-2 hover:bg-yellow-500 rounded-md transition-all cursor-pointer"
-          >
+          
             <span>Browse Categories</span>
-            <ChevronDown size={14} className={`transition-transform duration-300 ${isDrawerOpen ? 'rotate-180' : ''}`} />
-          </button>
-
+           
           <div className="flex-grow flex items-center bg-white rounded-md overflow-hidden h-11 shadow-inner focus-within:ring-2 focus-within:ring-slate-800 transition-all">
             <input type="text" placeholder="Search for Products" className="flex-grow px-4 text-sm outline-none font-medium" />
             <button className="bg-[#34495e] text-white px-6 h-full hover:bg-slate-700 transition-colors flex items-center justify-center">

@@ -38,9 +38,16 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="text-lg font-bold mb-6 border-b border-slate-700 pb-2">System Admin</h4>
-          <p className="text-slate-400 text-sm mb-4 italic">Internal portal for authorized staff only.</p>
-          
+          <h4 className="text-lg font-bold mb-6 border-b border-slate-700 pb-2">Support </h4>
+          <p className="text-slate-400 text-sm mb-4 italic">Help Center
+            
+          </p>
+          <p className="text-slate-400 text-sm mb-4 italic">
+            Contact Us 
+          </p>
+          <p className="text-slate-400 text-sm mb-4 italic"> FAQ
+          </p>
+             
         </div>
       </div>
 
