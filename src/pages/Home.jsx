@@ -60,48 +60,85 @@ export default function Home() {
     <div className="bg-[#f4f4f4] min-h-screen font-sans text-slate-800">
       <div className="max-w-[1440px] mx-auto px-4 py-6">
         
-        {/* SIDEBAR  */}
-        <div className="flex flex-col lg:flex-row gap-4 mb-6">
-          <aside className="hidden lg:block lg:w-1/4 bg-white border border-gray-200">
-            <CategorySidebar />
-          </aside>
+    <div className="flex flex-col lg:flex-row gap-4 mb-6">
+  {/* Sidebar - Remains on the left */}
+  <aside className="hidden lg:block lg:w-1/4 bg-white border border-gray-200">
+    <CategorySidebar />
+  </aside>
 
-          <div className="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden group">
-              <div className="relative z-10">
-                <div className="flex gap-0.5 mb-2">
-                  {[1, 2, 3].map(i => <Star key={i} size={14} className="fill-orange-500 text-orange-500" />)}
-                </div>
-                <h2 className="text-xl font-black uppercase leading-tight">CATCH THE <br /> BEST DEALS IN THE STORE</h2>
-                <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600 transition-colors">
-                  Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
-                </button>
-              </div>
-              <img src="/limited-offer.jpg" alt="banner" className="absolute right-2 bottom-4 w-36 group-hover:scale-110 transition-transform" />
-            </div>
-
-            <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden">
-              <h3 className="text-lg font-bold uppercase leading-tight">HOME, <br /> APPLIANCES <br /> ACCESSORIES</h3>
-              <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
-                Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
-              </button>
-              <img src="/gadgets.jpg" alt="appliances" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
-            </div>
-
-            <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden">
-              <h3 className="text-lg font-bold uppercase leading-tight">BEST <br /> GADGETS AND <br /> MORE</h3>
-              <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
-                Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
-              </button>
-              <img src="/apple-collection.jpg" alt="gadgets" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
-            </div>
+  {/* Main Content Area - Stacks rows vertically */}
+  <div className="flex-grow flex flex-col gap-4">
+    
+    {/* ROW 1: Three Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden group">
+        <div className="relative z-10">
+          <div className="flex gap-0.5 mb-2">
+            {[1, 2, 3].map(i => <Star key={i} size={14} className="fill-orange-500 text-orange-500" />)}
           </div>
-          
+          <h2 className="text-xl font-black uppercase leading-tight">CATCH THE <br /> BEST DEALS</h2>
+          <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600 transition-colors">
+            Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
+          </button>
         </div>
+        <img src="/limited-offer.jpg" alt="banner" className="absolute right-2 bottom-4 w-36 group-hover:scale-110 transition-transform" />
+      </div>
+
+      <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden group">
+        <h3 className="text-lg font-bold uppercase leading-tight">HOME <br /> APPLIANCES</h3>
+        <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
+          Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
+        </button>
+        <img src="/gadgets.jpg" alt="appliances" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
+      </div>
+
+      <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden group">
+        <h3 className="text-lg font-bold uppercase leading-tight">BEST <br /> GADGETS</h3>
+        <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
+          Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
+        </button>
+        <img src="/apple-collection.jpg" alt="gadgets" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
+      </div>
+    </div>
+
+    {/* ROW 2: Three Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden group">
+         {/* ... Card Content ... */}
+         <h2 className="text-xl font-black uppercase leading-tight">NEW <br /> ARRIVALS</h2>
+         <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600 transition-colors">
+            Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
+          </button>
+         <img src="/limited-offer.jpg" alt="banner" className="absolute right-2 bottom-4 w-36 group-hover:scale-110 transition-transform" />
+      </div>
+
+      <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden group">
+         {/* ... Card Content ... */}
+         <h3 className="text-lg font-bold uppercase leading-tight">OFFICE <br /> SOLUTIONS</h3>
+         <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
+          Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
+        </button>
+         <img src="/gadgets.jpg" alt="appliances" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
+      </div>
+
+      <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden group">
+         {/* ... Card Content ... */}
+         <h3 className="text-lg font-bold uppercase leading-tight">SMART <br /> WATCHES</h3>
+         <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
+          Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
+        </button>
+         <img src="/apple-collection.jpg" alt="gadgets" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
+      </div>
+    </div>
+
+  </div>
+</div>
+          
+       
           
         <div className="grid grid-cols-2 md:grid-cols-5 gap-0 bg-white border border-gray-200 mb-8 divide-x divide-gray-100">
           {[
-            { icon: <Truck />, title: "Delivery 200BR", sub: "IN ADDIS ABABA" },
+            { icon: <Truck />, title: "Delivery 200BR", sub: "IN BAHIR DAR" },
             { icon: <ShieldCheck />, title: "99% Positive", sub: "FEEDBACKS" },
             { icon: <Zap />, title: "24/7", sub: "SERVICE" },
             { icon: <CreditCard />, title: "Payment", sub: "OPTIONS" },
