@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { 
   Menu, Search, User, ShoppingBag, 
   ChevronDown, Phone, Mail, 
-  Store, LayoutDashboard, UserPlus, LogIn,
+  Store, UserPlus, LogIn,
   Truck, Heart
 } from 'lucide-react';
 import MobileDrawer from './MobileDrawer';
@@ -12,12 +12,13 @@ export default function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const location = useLocation();
   const [activeDropdown, setActiveDropdown] = useState(null);
-// Helper function to check if a link is active
+  
   const isActive = (path) => location.pathname === path;
 
   return (
     <header className="w-full bg-white font-sans text-[#333] relative shadow-sm">
-     
+      
+      {/* Top Bar */}
       <div className="border-b border-gray-100 py-1.5 px-4 hidden lg:block bg-gray-50/50">
         <div className="container mx-auto flex justify-between items-center text-[11px] font-medium text-gray-600">
           <div className="flex items-center space-x-6">
@@ -35,18 +36,18 @@ export default function Navbar() {
               <ChevronDown size={10} className={`transition-transform duration-300 ${activeDropdown === 'suq' ? 'rotate-180' : ''}`} />
               
               {activeDropdown === 'suq' && (
-                <div className="absolute top-full left-0 w-72 bg-white shadow-xl border border-gray-100 z-50 py-2 rounded-md text-sm text-gray-700 animate-in fade-in zoom-in duration-150">
-                  <div className="px-4 py-2 hover:bg-gray-50 border-b border-gray-50 flex items-center gap-2">
-                    <UserPlus size={14} className="text-gray-400" /> 
-                    <span>1. <b>Register</b> | <b>Become a Vendor</b>|<b> Sell Now</b> 
-                    </span>
-                  </div>
-                  <div className="px-4 py-2 hover:bg-gray-50 border-b border-gray-50 flex items-center gap-2">
-                    <LogIn size={14} className="text-gray-400" /> 
-                    <span>2. <b>Login</b> | <b>Store Manager</b>
-                    |<b>Sell Now</b> </span>
-                  </div>
-                 
+                <div className="absolute top-full left-0 w-80 bg-white shadow-xl border border-gray-100 z-50 py-2 rounded-md text-sm text-gray-700 animate-in fade-in zoom-in duration-150">
+                  {/* LINK 1: REGISTER / VENDOR */}
+                  <Link to="/signup" className="px-4 py-3 hover:bg-gray-50 border-b border-gray-50 flex items-center gap-2 transition-colors block">
+                    <UserPlus size={14} className="text-yellow-600" /> 
+                    <span>1. <b>Register</b> | Become a Vendor | <b>Sell Now</b></span>
+                  </Link>
+
+                  {/* LINK 2: LOGIN / STORE MANAGER */}
+                  <Link to="/login" className="px-4 py-3 hover:bg-gray-50 flex items-center gap-2 transition-colors block">
+                    <LogIn size={14} className="text-yellow-600" /> 
+                    <span>2. <b>Login</b> | Store Manager | <b>Sell Now</b></span>
+                  </Link>
                 </div>
               )}
             </div>
@@ -56,7 +57,8 @@ export default function Navbar() {
             <Link to="/wishlist" className="hover:text-yellow-600 flex items-center gap-1">
               <Heart size={12} /> My Wishlist
             </Link>
-            <Link to="/account" className="hover:text-yellow-600 flex items-center gap-1">
+            {/* LINK 3: MY ACCOUNT */}
+            <Link to="/login" className="hover:text-yellow-600 flex items-center gap-1">
               <User size={12} /> My Account
             </Link>
           </div>
@@ -84,23 +86,10 @@ export default function Navbar() {
         </div>
 
         <nav className="hidden lg:flex items-center space-x-8 text-sm font-bold text-gray-700">
-          <Link to="/" className={`${isActive('/') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}>
-          Home
-          </Link>
-          <Link to="/shop" className={`${isActive('/shop') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}
-          >Shop</Link>
-        <Link 
-            to="/about" 
-            className={`${isActive('/about') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}
-          >
-            About Us
-          </Link>
-          <Link 
-            to="/cart" 
-            className={`${isActive('/cart') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}
-          >
-            Cart
-          </Link>
+          <Link to="/" className={`${isActive('/') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}>Home</Link>
+          <Link to="/shop" className={`${isActive('/shop') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}>Shop</Link>
+          <Link to="/about" className={`${isActive('/about') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}>About Us</Link>
+          <Link to="/cart" className={`${isActive('/cart') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}>Cart</Link>
           
           <div className="flex items-center gap-3 border-l border-gray-200 pl-8 ml-2">
             <div className="bg-yellow-50 p-2 rounded-full">
@@ -120,16 +109,16 @@ export default function Navbar() {
             <Heart size={24} className="group-hover:text-yellow-500 transition-colors" />
             <span className="absolute -top-2 -right-2 bg-slate-800 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold border border-yellow-400">0</span>
           </Link>
-          <User size={24} className="cursor-pointer hover:text-yellow-500 transition-colors" />
+          {/* MAIN USER ICON LINK */}
+          <Link to="/login">
+            <User size={24} className="cursor-pointer hover:text-yellow-500 transition-colors" />
+          </Link>
         </div>
       </div>
 
-      {/*  CATEGORY & SEARCH BAR */}
       <div className="bg-yellow-400 py-3 shadow-sm z-10">
         <div className="container mx-auto px-4 flex items-center gap-4">
-          
-            <span>Browse Categories</span>
-           
+          <span className="font-bold text-slate-800 hidden md:block">Browse Categories</span>
           <div className="flex-grow flex items-center bg-white rounded-md overflow-hidden h-11 shadow-inner focus-within:ring-2 focus-within:ring-slate-800 transition-all">
             <input type="text" placeholder="Search for Products" className="flex-grow px-4 text-sm outline-none font-medium" />
             <button className="bg-[#34495e] text-white px-6 h-full hover:bg-slate-700 transition-colors flex items-center justify-center">

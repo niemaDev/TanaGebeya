@@ -120,7 +120,7 @@ export default function SignIn() {
         </form>
 
         <div className="mt-8 pt-6 border-t border-gray-100 text-center text-sm font-medium text-gray-500">
-          New here? <Link to="/signup" className="text-yellow-600 font-black hover:underline">Register | Become a Vendor</Link>
+          New here? <Link to="/signup" className="text-yellow-600 font-black hover:underline">Register </Link>
         </div>
       </div>
     </div>

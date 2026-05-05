@@ -155,7 +155,7 @@ export default function SignUp() {
         </form>
 
         <p className="mt-8 text-center text-sm font-medium text-gray-500 border-t border-gray-100 pt-6">
-          Already a member? <Link to="/login" className="text-yellow-600 font-black hover:underline">Login | Store Manager</Link>
+          Already a member? <Link to="/login" className="text-yellow-600 font-black hover:underline">Login </Link>
         </p>
       </div>
     </div>
