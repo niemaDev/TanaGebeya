@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { 
   Menu, Search, User, ShoppingBag, 
   ChevronDown, Phone, Mail, 
@@ -10,7 +10,10 @@ import MobileDrawer from './MobileDrawer';
 
 export default function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const location = useLocation();
   const [activeDropdown, setActiveDropdown] = useState(null);
+// Helper function to check if a link is active
+  const isActive = (path) => location.pathname === path;
 
   return (
     <header className="w-full bg-white font-sans text-[#333] relative shadow-sm">
@@ -35,16 +38,15 @@ export default function Navbar() {
                 <div className="absolute top-full left-0 w-72 bg-white shadow-xl border border-gray-100 z-50 py-2 rounded-md text-sm text-gray-700 animate-in fade-in zoom-in duration-150">
                   <div className="px-4 py-2 hover:bg-gray-50 border-b border-gray-50 flex items-center gap-2">
                     <UserPlus size={14} className="text-gray-400" /> 
-                    <span>1. <b>Register</b> | Become a Vendor</span>
+                    <span>1. <b>Register</b> | <b>Become a Vendor</b>|<b> Sell Now</b> 
+                    </span>
                   </div>
                   <div className="px-4 py-2 hover:bg-gray-50 border-b border-gray-50 flex items-center gap-2">
                     <LogIn size={14} className="text-gray-400" /> 
-                    <span>2. <b>Login</b> | Store Manager</span>
+                    <span>2. <b>Login</b> | <b>Store Manager</b>
+                    |<b>Sell Now</b> </span>
                   </div>
-                  <div className="px-4 py-2 hover:bg-gray-50 flex items-center gap-2">
-                    <LayoutDashboard size={14} className="text-gray-400" /> 
-                    <span>3. <b>Dashboard</b> | Store Manager</span>
-                  </div>
+                 
                 </div>
               )}
             </div>
@@ -82,26 +84,24 @@ export default function Navbar() {
         </div>
 
         <nav className="hidden lg:flex items-center space-x-8 text-sm font-bold text-gray-700">
-          <Link to="/" className="text-yellow-500 underline underline-offset-8 decoration-2">Home</Link>
-          <Link to="/shop" className="hover:text-yellow-500 transition-colors">Shop</Link>
-          
-          {/* Sell on TanaGebeya Dropdown */}
-          <div 
-            className="relative cursor-pointer py-1 flex items-center gap-1"
-            onMouseEnter={() => setActiveDropdown('sell')}
-            onMouseLeave={() => setActiveDropdown(null)}
+          <Link to="/" className={`${isActive('/') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}>
+          Home
+          </Link>
+          <Link to="/shop" className={`${isActive('/shop') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}
+          >Shop</Link>
+        <Link 
+            to="/about" 
+            className={`${isActive('/about') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}
           >
-            Sell on TanaGebeya 
-            <ChevronDown size={12} className={`transition-transform duration-300 ${activeDropdown === 'sell' ? 'rotate-180' : ''}`} />
-            
-            {activeDropdown === 'sell' && (
-              <div className="absolute top-full left-0 w-52 bg-white shadow-xl border border-gray-100 z-50 py-2 rounded-md font-medium text-gray-600 animate-in fade-in slide-in-from-top-1">
-                <Link to="/register-seller" className="block px-4 py-2 hover:bg-gray-50">Seller Registration</Link>
-                <Link to="/seller-dashboard" className="block px-4 py-2 hover:bg-gray-50">Seller Dashboard</Link>
-              </div>
-            )}
-          </div>
-
+            About Us
+          </Link>
+          <Link 
+            to="/cart" 
+            className={`${isActive('/cart') ? 'text-yellow-500 underline underline-offset-8 decoration-2' : 'hover:text-yellow-500'} transition-colors`}
+          >
+            Cart
+          </Link>
+          
           <div className="flex items-center gap-3 border-l border-gray-200 pl-8 ml-2">
             <div className="bg-yellow-50 p-2 rounded-full">
               <Phone size={16} className="text-yellow-600" />

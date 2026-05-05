@@ -4,7 +4,8 @@ import MainLayout from './layouts/MainLayout';
 import AdminLayout from './layouts/AdminLayout';
 // Pages (Features)
 import Home from './pages/Home';
-import Shop from './pages/Shop'
+import Shop from './pages/Shop';
+import About from './pages/About';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import SignIn from './features/auth/SignIn';
@@ -32,6 +33,7 @@ function App() {
           <Route path="product/:id" element={<ProductDetails />} />
           <Route path="cart" element={<Cart />} />
           <Route path="shop" element ={<Shop/>}  />
+          <Route path="about" element={<About />} />
           <Route path="login" element={<SignIn />} />
           <Route path="signup" element={<SignUp/>} />
           <Route path="wishlist" element={<Wishlist/>} />
