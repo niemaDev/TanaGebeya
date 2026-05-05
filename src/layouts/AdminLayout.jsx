@@ -1,60 +1,61 @@
-// src/layouts/AdminLayout.jsx
-import { Outlet, Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import Sidebar from '../components/common/Sidebar'; 
+import { Outlet, Navigate } from 'react-router-dom';
 
 const AdminLayout = () => {
-  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
+  const token = localStorage.getItem('token');
 
-  const handleLogout = () => {
-    localStorage.removeItem('user'); // Simple logout logic
-    navigate('/login');
-  };
+  if (!token || !user || (user.role !== 'admin' && user.role !== 'vendor')) {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
-    <div className="flex h-screen bg-gray-100 font-sans">
-      <aside className="w-64 bg-slate-900 text-white flex flex-col shadow-xl">
-        <div className="p-6 text-2xl font-bold border-b border-slate-800 tracking-tight">
-          SMS Admin
-        </div>
+    <div className="flex h-screen w-full bg-[#F8FAFC] overflow-hidden">
+      {/* SIDEBAR - Fixed width, no overlap */}
+      <Sidebar role={user.role} />
+
+      {/* MAIN CONTENT AREA */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         
-        <nav className="flex-grow p-4 space-y-2">
-          <Link to="/admin" className="block px-4 py-2.5 rounded hover:bg-slate-800 transition-colors">
-            📊 Dashboard
-          </Link>
-          <Link to="/admin/inventory" className="block px-4 py-2.5 rounded hover:bg-slate-800 transition-colors">
-            📦 Inventory Management
-          </Link>
-          <Link to="/admin/users" className="block px-4 py-2.5 rounded hover:bg-slate-800 transition-colors">
-            👥 User Management
-          </Link>
-          <Link to="/admin/reports" className="block px-4 py-2.5 rounded hover:bg-slate-800 transition-colors">
-            📈 Sales Reports
-          </Link>
-        </nav>
-
-        <div className="p-4 border-t border-slate-800">
-          <button 
-            onClick={handleLogout}
-            className="w-full text-left px-4 py-2 text-red-400 hover:bg-slate-800 rounded transition"
-          >
-            🚪 Logout
-          </button>
-        </div>
-      </aside>
-
-      <div className="flex-grow flex flex-col overflow-hidden">
-
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 shadow-sm">
-          <h2 className="text-xl font-semibold text-gray-800">Administrator Portal</h2>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-500 italic">SMS 2026 v1.0</span>
-            <div className="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">
-              AD
+        {/* HEADER */}
+        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 z-10 shadow-sm">
+          <div>
+            <h1 className="text-xl font-black text-slate-900 tracking-tight uppercase">
+              {user.role === 'admin' ? 'Admin Portal' : 'Vendor Portal'}
+            </h1>
+            <p className="text-[10px] font-bold text-yellow-600 tracking-widest -mt-1">
+              TANAGEBEYA BAHIR DAR
+            </p>
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <div className="text-right">
+              <p className="text-sm font-bold text-slate-900">{user.name || 'User'}</p>
+              <p className="text-[10px] font-medium text-gray-400 uppercase">{user.role}</p>
+            </div>
+            <div className="h-10 w-10 rounded-xl bg-yellow-500 flex items-center justify-center text-slate-900 font-black shadow-md">
+              {user.name?.substring(0, 2).toUpperCase() || 'ME'}
             </div>
           </div>
         </header>
 
-        <main className="flex-grow overflow-y-auto p-8 bg-gray-50">
-          <div className="max-w-6xl mx-auto">
+        {/* PAGE SCROLL AREA */}
+        <main className="flex-1 overflow-y-auto p-8 bg-gray-50 ">
+          <div className="max-w-7xl mx-auto">
+            {/* VENDOR APPROVAL STATUS */}
+            {user.role === 'vendor' && !user.isApproved && (
+              <div className="mb-8 bg-white border-l-4 border-yellow-500 p-6 rounded-2xl shadow-sm flex items-center gap-4 animate-in fade-in slide-in-from-top-4">
+                <div className="h-12 w-12 bg-yellow-50 rounded-full flex items-center justify-center text-yellow-600">
+                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+                <div>
+                  <h3 className="font-bold text-slate-900">Store Under Review</h3>
+                  <p className="text-sm text-slate-500">Your products will be visible to customers once our team approves your vendor profile.</p>
+                </div>
+              </div>
+            )}
+
             <Outlet />
           </div>
         </main>

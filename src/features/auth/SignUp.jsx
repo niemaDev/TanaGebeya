@@ -1,18 +1,33 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { User, Mail, Lock, UserPlus, Eraser, AlertCircle, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { 
+  User, Mail, Lock, UserPlus, Eraser, AlertCircle, 
+  ShieldCheck, Eye, EyeOff, Users, Store, PackageSearch, ChevronDown 
+} from 'lucide-react';
 
 export default function SignUp() {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '', confirm: '' });
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    email: '', 
+    password: '', 
+    confirm: '', 
+    role: 'customer', 
+    storeName: '',
+    businessDescription: '' 
+  });
+  
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Real-time mismatch warning
+  // Real-time password matching
   useEffect(() => {
     if (formData.confirm && formData.password !== formData.confirm) {
-      setErrors(prev => ({ ...prev, confirm: "Passwords do not match yet" }));
+      setErrors(prev => ({ ...prev, confirm: "Passwords do not match" }));
     } else {
       setErrors(prev => {
         const { confirm, ...rest } = prev;
@@ -22,141 +37,189 @@ export default function SignUp() {
   }, [formData.password, formData.confirm]);
 
   const handleClear = () => {
-    setFormData({ name: '', email: '', password: '', confirm: '' });
+    setFormData({ name: '', email: '', password: '', confirm: '', role: 'customer', storeName: '', businessDescription: '' });
     setErrors({});
   };
 
   const validate = () => {
     let newErrors = {};
-    if (!formData.name) newErrors.name = "Full name is required";
-    if (!formData.email) newErrors.email = "Email is required";
+    if (!formData.name.trim()) newErrors.name = "Full name is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
     if (formData.password.length < 6) newErrors.password = "Min 6 characters required";
-    if (formData.password !== formData.confirm) newErrors.confirm = "Passwords must match";
     
+    if (formData.role === 'vendor') {
+      if (!formData.storeName.trim()) newErrors.storeName = "Store name is required";
+      if (!formData.businessDescription.trim()) newErrors.businessDescription = "Description required for admin review";
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // --- CONNECTED TO BACKEND ---
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (validate()) {
-      try {
-        // We only send name, email, and password (we don't need 'confirm' in the database)
-        const userData = {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password
-        };
+    if (!validate()) return;
 
-        const response = await axios.post('http://localhost:5000/api/signup', userData);
-        
-        if (response.status === 201) {
-          alert("Registration Successful! Check MongoDB Compass.");
-          handleClear(); // Clear form after success
+    setIsSubmitting(true);
+    try {
+      const userData = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+        vendorProfile: {
+          storeName: formData.role === 'vendor' ? formData.storeName : "",
+          businessDescription: formData.role === 'vendor' ? formData.businessDescription : ""
         }
-      } catch (error) {
-        console.error("Error during signup:", error);
-        alert(error.response?.data?.error || "Signup failed. Is your backend server running?");
+      };
+
+      const response = await axios.post('http://localhost:5000/api/signup', userData);
+      if (response.status === 201) {
+        alert(formData.role === 'vendor' ? "Application Sent! Admin will review your store." : "Welcome to TanaGebeya!");
+        navigate('/login');
       }
+    } catch (error) {
+      alert(error.response?.data?.error || "Signup failed.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[90vh] bg-[#f4f4f4] py-12 px-4">
-      <div className="w-full max-w-md bg-white p-10 rounded-2xl shadow-xl border border-gray-100">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-black text-slate-800 uppercase tracking-tighter">Create Account</h2>
-          <p className="text-gray-400 text-[10px] font-bold uppercase tracking-widest mt-1">Join the TanaGebeya Community</p>
+    <div className="flex items-center justify-center min-h-screen bg-[#F8FAFC] py-10 px-4">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+        
+        {/* Header Section */}
+        <div className="bg-yellow-500 py-8 text-center">
+          <h1 className="text-3xl font-black text-slate-900 tracking-tighter uppercase">TanaGebeya</h1>
+          <p className="text-slate-800 text-xs font-bold mt-1 tracking-widest opacity-80">CREATE YOUR ACCOUNT</p>
         </div>
 
-        <form onSubmit={handleSubmit}className="space-y-4">
-          {/* Name Field */}
+        <form onSubmit={handleSubmit} className="p-8 space-y-5">
+          
+          {/* Full Name */}
           <div className="space-y-1">
-            <div className={`relative flex items-center border-2 rounded-xl transition-all ${errors.name ? 'border-red-500 bg-red-50' : 'border-gray-100 bg-gray-50 focus-within:border-yellow-500 focus-within:bg-white'}`}>
-              <User className={`ml-4 ${errors.name ? 'text-red-500' : 'text-gray-400'}`} size={18} />
+            <div className={`flex items-center border-2 rounded-2xl transition-all duration-300 ${errors.name ? 'border-red-400 bg-red-50' : 'border-gray-100 bg-gray-50 focus-within:border-yellow-500 focus-within:bg-white focus-within:shadow-sm'}`}>
+              <User className="ml-4 text-gray-400" size={18} />
               <input 
                 type="text" 
                 placeholder="Full Name" 
-                className="w-full pl-3 pr-4 py-3 bg-transparent outline-none text-sm"
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                className="w-full pl-3 pr-4 py-3.5 bg-transparent outline-none text-sm font-medium" 
+                value={formData.name} 
+                onChange={(e) => setFormData({...formData, name: e.target.value})} 
               />
             </div>
-            {errors.name && <p className="text-red-500 text-[10px] font-bold ml-1 pt-1">{errors.name}</p>}
           </div>
 
-          {/* Email Field */}
+          {/* Email Address */}
           <div className="space-y-1">
-            <div className={`relative flex items-center border-2 rounded-xl transition-all ${errors.email ? 'border-red-500 bg-red-50' : 'border-gray-100 bg-gray-50 focus-within:border-yellow-500 focus-within:bg-white'}`}>
-              <Mail className={`ml-4 ${errors.email ? 'text-red-500' : 'text-gray-400'}`} size={18} />
-              <input type="email" placeholder="Email" className="w-full pl-3 pr-4 py-3 bg-transparent outline-none text-sm" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})}/>
+            <div className={`flex items-center border-2 rounded-2xl transition-all duration-300 ${errors.email ? 'border-red-400 bg-red-50' : 'border-gray-100 bg-gray-50 focus-within:border-yellow-500 focus-within:bg-white focus-within:shadow-sm'}`}>
+              <Mail className="ml-4 text-gray-400" size={18} />
+              <input 
+                type="email" 
+                placeholder="Email Address" 
+                className="w-full pl-3 pr-4 py-3.5 bg-transparent outline-none text-sm font-medium" 
+                value={formData.email} 
+                onChange={(e) => setFormData({...formData, email: e.target.value})} 
+              />
             </div>
-            {errors.email && <p className="text-red-500 text-[10px] font-bold ml-1 pt-1">{errors.email}</p>}
           </div>
 
-          {/* Password Field with Eye Icon */}
+          {/* Account Type Dropdown with Icon */}
           <div className="space-y-1">
-            <div className={`relative flex items-center border-2 rounded-xl transition-all ${errors.password ? 'border-red-500 bg-red-50' : 'border-gray-100 bg-gray-50 focus-within:border-yellow-500 focus-within:bg-white'}`}>
-              <Lock className={`ml-4 ${errors.password ? 'text-red-500' : 'text-gray-400'}`} size={18} />
+            <div className="relative flex items-center border-2 border-gray-100 bg-gray-50 rounded-2xl focus-within:border-yellow-500 focus-within:bg-white transition-all duration-300">
+              <Users className="ml-4 text-gray-400" size={18} />
+              <select 
+                className="w-full pl-3 pr-10 py-3.5 bg-transparent outline-none text-sm font-semibold text-gray-700 cursor-pointer appearance-none"
+                value={formData.role}
+                onChange={(e) => setFormData({...formData, role: e.target.value})}
+              >
+                <option value="customer">Customer (Buyer)</option>
+                <option value="vendor">Seller (Vendor)</option>
+              </select>
+              <ChevronDown className="absolute right-4 text-gray-400 pointer-events-none" size={18} />
+            </div>
+          </div>
+
+          {/* Animated Seller Fields */}
+          {formData.role === 'vendor' && (
+            <div className="space-y-4 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-500">
+              <div className="bg-yellow-50 p-4 rounded-2xl border border-yellow-100 space-y-4">
+                <div className="flex items-center border-2 border-white bg-white rounded-xl">
+                  <Store className="ml-3 text-yellow-600" size={16} />
+                  <input 
+                    type="text" 
+                    placeholder="Store Name" 
+                    className="w-full pl-3 pr-4 py-2.5 bg-transparent outline-none text-sm font-medium" 
+                    value={formData.storeName} 
+                    onChange={(e) => setFormData({...formData, storeName: e.target.value})} 
+                  />
+                </div>
+                <div className="flex items-start border-2 border-white bg-white rounded-xl">
+                  <PackageSearch className="ml-3 mt-3 text-yellow-600" size={16} />
+                  <textarea 
+                    placeholder="What will you sell? (No alcohol/drugs)" 
+                    className="w-full pl-3 pr-4 py-2.5 bg-transparent outline-none text-sm font-medium h-20 resize-none" 
+                    value={formData.businessDescription} 
+                    onChange={(e) => setFormData({...formData, businessDescription: e.target.value})} 
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Password Fields */}
+          <div className="grid grid-cols-1 gap-4">
+            <div className="relative flex items-center border-2 border-gray-100 bg-gray-50 rounded-2xl focus-within:border-yellow-500 focus-within:bg-white transition-all duration-300">
+              <Lock className="ml-4 text-gray-400" size={18} />
               <input 
                 type={showPassword ? "text" : "password"} 
                 placeholder="Password" 
-                className="w-full pl-3 pr-12 py-3 bg-transparent outline-none text-sm" 
+                className="w-full pl-3 pr-10 py-3.5 bg-transparent outline-none text-sm font-medium" 
                 value={formData.password} 
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                onChange={(e) => setFormData({...formData, password: e.target.value})} 
               />
-              <button 
-                type="button" 
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 text-gray-400 hover:text-yellow-600"
-              >
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 text-gray-400">
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
-            {errors.password && <p className="text-red-500 text-[10px] font-bold ml-1 pt-1">{errors.password}</p>}
-          </div>
-
-          {/* Confirm Password Field with Eye & Mismatch Warning */}
-          <div className="space-y-1">
-            <div className={`relative flex items-center border-2 rounded-xl transition-all ${errors.confirm ? 'border-red-500 bg-red-50' : 'border-gray-100 bg-gray-50 focus-within:border-yellow-500 focus-within:bg-white'}`}>
-              <ShieldCheck className={`ml-4 ${errors.confirm ? 'text-red-500' : 'text-gray-400'}`} size={18} />
+            
+            <div className={`relative flex items-center border-2 rounded-2xl transition-all duration-300 ${errors.confirm ? 'border-red-400 bg-red-50' : 'border-gray-100 bg-gray-50 focus-within:border-yellow-500 focus-within:bg-white'}`}>
+              <ShieldCheck className="ml-4 text-gray-400" size={18} />
               <input 
                 type={showConfirm ? "text" : "password"} 
                 placeholder="Confirm Password" 
-                className="w-full pl-3 pr-12 py-3 bg-transparent outline-none text-sm" 
+                className="w-full pl-3 pr-10 py-3.5 bg-transparent outline-none text-sm font-medium" 
                 value={formData.confirm} 
-                onChange={(e) => setFormData({...formData, confirm: e.target.value})}
+                onChange={(e) => setFormData({...formData, confirm: e.target.value})} 
               />
-              <button 
-                type="button" 
-                onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-4 text-gray-400 hover:text-yellow-600"
-              >
-                {showConfirm ? <EyeOff size={18} /> : <Eye size={18} />}
-              </button>
             </div>
-            {errors.confirm && (
-              <p className="text-red-500 text-[10px] font-bold flex items-center gap-1 ml-1 pt-1">
-                <AlertCircle size={12} /> {errors.confirm}
-              </p>
-            )}
           </div>
 
+          {/* Action Buttons */}
           <div className="flex gap-3 pt-4">
-            <button type="button" onClick={handleClear} className="flex-1 bg-gray-100 text-gray-600 py-3.5 rounded-xl font-bold uppercase text-xs flex items-center justify-center gap-2 hover:bg-gray-200">
-              <Eraser size={16} /> Clear
+            <button 
+              type="button" 
+              onClick={handleClear} 
+              className="flex-1 py-3.5 rounded-2xl text-sm font-bold text-gray-500 bg-gray-50 hover:bg-gray-100 transition-all active:scale-95"
+            >
+              RESET
             </button>
-            <button type="submit" className="flex-[2] bg-yellow-500 text-slate-900 py-3.5 rounded-xl font-bold uppercase text-xs flex items-center justify-center gap-2 hover:bg-yellow-400 shadow-lg active:scale-95">
-              <UserPlus size={16} /> Register
+            <button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="flex-[2] py-3.5 rounded-2xl text-sm font-black text-slate-900 bg-yellow-500 hover:bg-yellow-400 shadow-lg shadow-yellow-200 transition-all active:scale-95 disabled:bg-gray-200 uppercase tracking-tight"
+            >
+              {isSubmitting ? 'JOINING...' : 'REGISTER NOW'}
             </button>
           </div>
         </form>
 
-        <p className="mt-8 text-center text-sm font-medium text-gray-500 border-t border-gray-100 pt-6">
-          Already a member? <Link to="/login" className="text-yellow-600 font-black hover:underline">Login </Link>
-        </p>
+        <div className="p-6 bg-gray-50 text-center border-t border-gray-100">
+          <p className="text-xs font-bold text-gray-500">
+            ALREADY HAVE AN ACCOUNT? <Link to="/login" className="text-yellow-600 hover:underline">LOG IN HERE</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

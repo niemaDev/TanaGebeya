@@ -1,127 +1,110 @@
+import axios from 'axios';
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate for redirection
-import axios from 'axios'; // Import axios
-import { Mail, Lock, LogIn, Eraser, AlertCircle } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, LogIn, Eye, EyeOff, AlertCircle, Eraser } from 'lucide-react';
 
-export default function SignIn() {
+export default function Login() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
-  const [errors, setErrors] = useState({});
-  const [serverError, setServerError] = useState(""); // To track backend errors
-  const navigate = useNavigate(); // Hook to redirect user after login
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleClear = () => {
     setFormData({ email: '', password: '' });
-    setErrors({});
-    setServerError("");
-  };
-
-  const validate = () => {
-    let newErrors = {};
-    if (!formData.email) newErrors.email = "Please enter your email address";
-    else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email format is invalid";
-    
-    if (!formData.password) newErrors.password = "Please enter your password";
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setServerError(""); // Reset server errors on new attempt
+    setError('');
+    setIsSubmitting(true);
 
-    if (validate()) {
-      try {
-        // --- AXIOS LOGIN CALL ---
-        const response = await axios.post('http://localhost:5000/api/login', {
-          email: formData.email,
-          password: formData.password
-        });
+    try {
+      const response = await axios.post('http://localhost:5000/api/login', formData);
+      
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
 
-        if (response.status === 200) {
-          console.log("Login Successful:", response.data);
-          alert("Welcome back, " + response.data.user.name + "!");
-          
-          // Redirect to Dashboard or Home after successful login
-          // navigate('/dashboard'); 
+        const role = response.data.user.role; // Expecting 'admin', 'vendor', or 'customer'
+
+        // MATCHING THE ROUTES IN APP.JSX
+        if (role === 'admin') {
+          navigate('/admin/dashboard');
+        } else if (role === 'vendor') {
+          navigate('/vendor/dashboard');
+        } else {
+          navigate('/');
         }
-      } catch (error) {
-        // Handle errors from your backend (e.g., 404 User not found, 401 Invalid password)
-        const errorMessage = error.response?.data?.error || "Connection failed. Is the server running?";
-        setServerError(errorMessage);
-        console.error("Login error:", errorMessage);
       }
+    } catch (err) {
+      setError(err.response?.data?.error || "Invalid email or password");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[85vh] bg-[#f4f4f4] px-4">
-      <div className="w-full max-w-md bg-white p-10 rounded-2xl shadow-xl border border-gray-100 transition-all">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-black text-slate-800 uppercase tracking-tighter">Welcome Back</h2>
-          <p className="text-gray-400 text-xs font-bold uppercase tracking-widest mt-1">Sign in to TanaGebeya</p>
+    <div className="flex items-center justify-center min-h-screen bg-[#F8FAFC] py-10 px-4">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+        <div className="bg-yellow-500 py-10 text-center">
+          <h1 className="text-3xl font-black text-slate-900 uppercase tracking-tighter">TanaGebeya</h1>
+          <p className="text-slate-800 text-xs font-bold mt-1 tracking-widest opacity-80">SECURE ACCESS</p>
         </div>
 
-        {/* Global Server Error Message */}
-        {serverError && (
-          <div className="mb-6 p-3 bg-red-50 border-l-4 border-red-500 flex items-center gap-2 text-red-700 text-xs font-bold rounded">
-            <AlertCircle size={16} />
-            {serverError}
-          </div>
-        )}
+        <form onSubmit={handleSubmit} className="p-8 space-y-6">
+          {error && (
+            <div className="flex items-center gap-3 bg-red-50 border border-red-100 text-red-600 p-4 rounded-2xl">
+              <AlertCircle size={18} />
+              <p className="text-xs font-bold uppercase">{error}</p>
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email Field */}
           <div className="space-y-1">
-            <div className={`relative flex items-center border-2 rounded-xl transition-all ${errors.email ? 'border-red-500 bg-red-50' : 'border-gray-100 bg-gray-50 focus-within:border-yellow-500 focus-within:bg-white'}`}>
-              <Mail className={`ml-4 ${errors.email ? 'text-red-500' : 'text-gray-400'}`} size={20} />
+            <label className="text-[10px] font-bold uppercase text-gray-400 ml-1">Email Address</label>
+            <div className="flex items-center border-2 border-gray-100 bg-gray-50 rounded-2xl focus-within:border-yellow-500 focus-within:bg-white transition-all">
+              <Mail className="ml-4 text-gray-400" size={18} />
               <input 
                 type="email" 
-                placeholder="Email Address" 
-                className="w-full pl-3 pr-4 py-3.5 bg-transparent outline-none text-sm font-medium"
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
+                required 
+                className="w-full pl-3 pr-4 py-4 bg-transparent outline-none text-sm font-medium" 
+                value={formData.email} 
+                onChange={(e) => setFormData({...formData, email: e.target.value})} 
               />
             </div>
-            {errors.email && <p className="text-red-500 text-[11px] font-bold flex items-center gap-1 ml-1"><AlertCircle size={12}/> {errors.email}</p>}
           </div>
 
-          {/* Password Field */}
           <div className="space-y-1">
-            <div className={`relative flex items-center border-2 rounded-xl transition-all ${errors.password ? 'border-red-500 bg-red-50' : 'border-gray-100 bg-gray-50 focus-within:border-yellow-500 focus-within:bg-white'}`}>
-              <Lock className={`ml-4 ${errors.password ? 'text-red-500' : 'text-gray-400'}`} size={20} />
+            <label className="text-[10px] font-bold uppercase text-gray-400 ml-1">Password</label>
+            <div className="relative flex items-center border-2 border-gray-100 bg-gray-50 rounded-2xl focus-within:border-yellow-500 focus-within:bg-white transition-all">
+              <Lock className="ml-4 text-gray-400" size={18} />
               <input 
-                type="password" 
-                placeholder="Password" 
-                className="w-full pl-3 pr-4 py-3.5 bg-transparent outline-none text-sm font-medium"
-                value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                type={showPassword ? "text" : "password"} 
+                required 
+                className="w-full pl-3 pr-12 py-4 bg-transparent outline-none text-sm font-medium" 
+                value={formData.password} 
+                onChange={(e) => setFormData({...formData, password: e.target.value})} 
               />
+              <button 
+                type="button" 
+                onClick={() => setShowPassword(!showPassword)} 
+                className="absolute right-4 text-gray-400 hover:text-yellow-600"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
-            {errors.password && <p className="text-red-500 text-[11px] font-bold flex items-center gap-1 ml-1"><AlertCircle size={12}/> {errors.password}</p>}
           </div>
 
-          {/* Buttons Group */}
-          <div className="flex gap-3 pt-2">
-            <button 
-              type="button"
-              onClick={handleClear}
-              className="flex-1 bg-gray-100 text-gray-600 py-3.5 rounded-xl font-bold uppercase text-xs flex items-center justify-center gap-2 hover:bg-gray-200 transition-all"
-            >
-              <Eraser size={16} /> Clear
+          <div className="flex gap-4 pt-4">
+            <button type="button" onClick={handleClear} className="flex-1 py-4 rounded-2xl text-sm font-bold text-gray-500 bg-gray-50 hover:bg-gray-100 flex items-center justify-center gap-2">
+              <Eraser size={18} /> CLEAR
             </button>
-            <button 
-              type="submit" 
-              className="flex-[2] bg-[#34495e] text-white py-3.5 rounded-xl font-bold uppercase text-xs flex items-center justify-center gap-2 hover:bg-slate-700 transition-all shadow-lg active:scale-95"
-            >
-              <LogIn size={16} /> Submit
+            <button type="submit" disabled={isSubmitting} className="flex-[2] py-4 rounded-2xl text-sm font-black text-slate-900 bg-yellow-500 hover:bg-yellow-400 shadow-lg flex items-center justify-center gap-2 uppercase tracking-wider">
+              {isSubmitting ? <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" /> : <><LogIn size={18} /> LOGIN</>}
             </button>
           </div>
         </form>
-
-        <div className="mt-8 pt-6 border-t border-gray-100 text-center text-sm font-medium text-gray-500">
-          New here? <Link to="/signup" className="text-yellow-600 font-black hover:underline">Register </Link>
-        </div>
       </div>
     </div>
   );
