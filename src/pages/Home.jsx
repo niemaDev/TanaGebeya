@@ -109,7 +109,7 @@ export default function Home() {
          <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600 transition-colors">
             Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
           </button>
-         <img src="/limited-offer.jpg" alt="banner" className="absolute right-2 bottom-4 w-36 group-hover:scale-110 transition-transform" />
+         <img src="/new-arrivals.jpg" alt="banner" className="absolute right-2 bottom-4  h-34 w-48 group-hover:scale-110 transition-transform" />
       </div>
 
       <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden group">
@@ -118,7 +118,7 @@ export default function Home() {
          <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
           Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
         </button>
-         <img src="/gadgets.jpg" alt="appliances" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
+         <img src="/office-solutions.jpg" alt="appliances" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
       </div>
 
       <div className="bg-white p-6 border border-gray-200 relative h-[260px] overflow-hidden group">
@@ -127,7 +127,7 @@ export default function Home() {
          <button className="flex items-center gap-2 mt-4 text-xs font-bold uppercase hover:text-yellow-600">
           Shop now <ChevronRight size={16} className="bg-yellow-400 rounded-full p-0.5 text-slate-900" />
         </button>
-         <img src="/apple-collection.jpg" alt="gadgets" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
+         <img src="/smart-watches.jpg" alt="gadgets" className="absolute right-2 bottom-4 h-26 w-55 group-hover:scale-110 transition-transform" />
       </div>
     </div>
 

@@ -1,117 +1,92 @@
 import { useState } from 'react';
-import { LayoutGrid, ChevronRight, X } from 'lucide-react';
+import { ChevronRight, X } from 'lucide-react';
 
 const categories = [
-  { 
-    id: 1, 
-    name: 'Bed and Bath', 
-    image: 'https://via.placeholder.com/24',
-    subCategories: ['Bed Sheets', 'Pillows', 'Towels', 'Bath Mats']
-  },
-  { 
-    id: 2, 
-    name: 'Beverage', 
-    image: 'https://via.placeholder.com/24',
-    subCategories: ['Tea', 'Coffee', 'Soft Drinks', 'Juice', 'Water']
-  },
-  { 
-    id: 3, 
-    name: 'Electronics and Home Appliance', 
-    image: 'https://via.placeholder.com/24',
-    subCategories: ['Kitchen Appliances', 'TVs', 'Audio Systems', 'Vacuum Cleaners']
-  },
-  { 
-    id: 4, 
-    name: 'Food', 
-    image: 'https://via.placeholder.com/24',
-    subCategories: ['Canned Goods', 'Snacks', 'Pasta & Grains', 'Spices']
-  },
-  { id: 5, name: 'Furniture', image: 'https://via.placeholder.com/24', subCategories: ['Chairs', 'Tables', 'Storage'] },
-  { id: 6, name: 'Home Care', image: 'https://via.placeholder.com/24', subCategories: ['Detergents', 'Cleaning Tools'] },
-  { id: 7, name: 'Personal Care', image: 'https://via.placeholder.com/24', subCategories: ['Skincare', 'Haircare', 'Oral Care'] },
-  { id: 8, name: 'Stationary', image: 'https://via.placeholder.com/24', subCategories: ['Notebooks', 'Pens', 'Office Supplies'] },
+  { name: 'Bed and Bath', sub: ['Bed Sheets', 'Pillows', 'Towels', 'Bath Mats'] },
+  { name: 'Beverage', sub: ['Tea', 'Coffee', 'Soft Drinks', 'Juice', 'Water'] },
+  { name: 'Electronics and Home Appliance', sub: ['Kitchen Appliances', 'TVs', 'Audio Systems'] },
+  { name: 'Food', sub: ['Canned Goods', 'Snacks', 'Pasta & Grains', 'Spices'] },
+  { name: 'Furniture', sub: ['Chairs', 'Tables', 'Storage'] },
+  { name: 'Home Care', sub: ['Detergents', 'Cleaning Tools'] },
+  { name: 'Personal Care', sub: ['Skincare', 'Haircare', 'Oral Care'] },
+  { name: 'Stationary', sub: ['Notebooks', 'Pens', 'Office Supplies'] },
 ];
 
-export default function CategorySidebar() {
-  const [activeCategory, setActiveCategory] = useState(null);
-
-  const handleCategoryClick = (cat) => {
-    // If clicking the same category, close it; otherwise open the new one
-    setActiveCategory(activeCategory?.id === cat.id ? null : cat);
-  };
+// Destructure activeCategory and setActiveCategory from props
+export default function CategorySidebar({ activeCategory, setActiveCategory }) {
+  const [hoveredCat, setHoveredCat] = useState(null);
 
   return (
-    <div className="relative bg-white shadow-sm border border-gray-100 h-full min-h-[450px]">
-      {/* Header Section - Dark Yellow / Slate Theme */}
-      <div className="p-4 flex items-center space-x-3 border-b bg-yellow-600 text-white">
-        <LayoutGrid size={20} />
-        <span className="font-bold text-sm tracking-tight uppercase">All Products</span>
+    <div className="w-full bg-white border border-gray-100 rounded-b-lg shadow-sm relative">
+      {/* All Products Header - Resets filter to 'All' */}
+      <div 
+        onClick={() => setActiveCategory('All')}
+        className="bg-[#d48806] text-white p-4 font-black uppercase text-sm flex items-center gap-3 cursor-pointer hover:bg-[#b87605] transition-colors"
+      >
+        <span className="grid grid-cols-2 gap-0.5 w-4">
+          <span className="w-1.5 h-1.5 bg-white"></span>
+          <span className="w-1.5 h-1.5 bg-white"></span>
+          <span className="w-1.5 h-1.5 bg-white"></span>
+          <span className="w-1.5 h-1.5 bg-white"></span>
+        </span>
+        All Products
       </div>
-
-      <nav className="divide-y divide-gray-50 relative">
+      
+      <ul className="py-2">
         {categories.map((cat) => (
-          <div key={cat.id} className="relative">
-            <button
-              onClick={() => handleCategoryClick(cat)}
-              className={`w-full text-left px-4 py-3.5 flex items-center justify-between transition-all group ${
-                activeCategory?.id === cat.id ? 'bg-yellow-50 text-yellow-700' : 'hover:bg-gray-50'
-              }`}
-            >
-              <div className="flex items-center space-x-3">
-                <img 
-                  src={cat.image} 
-                  alt={cat.name} 
-                  className={`w-6 h-6 object-contain transition-all ${
-                    activeCategory?.id === cat.id ? 'grayscale-0' : 'grayscale group-hover:grayscale-0'
-                  }`} 
-                />
-                <span className="text-[13px] font-semibold text-gray-700 group-hover:text-yellow-700 transition-colors">
-                  {cat.name}
-                </span>
-              </div>
-              <ChevronRight 
-                size={14} 
-                className={`transition-all ${
-                  activeCategory?.id === cat.id 
-                    ? 'text-yellow-600 rotate-180' 
-                    : 'text-gray-300 group-hover:text-yellow-600 group-hover:translate-x-1'
-                }`} 
-              />
-            </button>
+          <li 
+            key={cat.name}
+            onMouseEnter={() => setHoveredCat(cat)}
+            onMouseLeave={() => setHoveredCat(null)}
+            // Clicking the main category filter
+            onClick={() => setActiveCategory(cat.name)}
+            className={`group px-4 py-3 flex items-center justify-between cursor-pointer transition-colors border-b border-gray-50 last:border-0
+              ${activeCategory === cat.name ? 'bg-yellow-50' : 'hover:bg-gray-50'}
+            `}
+          >
+            <div className="flex items-center gap-3">
+              {/* Dynamic Icon Color based on Active State */}
+              <div className={`w-6 h-6 rounded transition-colors 
+                ${activeCategory === cat.name ? 'bg-yellow-400' : 'bg-gray-100 group-hover:bg-yellow-100'}`}
+              ></div>
+              <span className={`text-[13px] font-medium transition-colors 
+                ${activeCategory === cat.name ? 'text-yellow-700' : 'text-gray-700'}`}
+              >
+                {cat.name}
+              </span>
+            </div>
+            <ChevronRight 
+              size={14} 
+              className={activeCategory === cat.name ? 'text-yellow-600' : 'text-gray-300 group-hover:text-yellow-600'} 
+            />
 
-            {/* --- MEGA MENU PANEL --- */}
-            {/* This displays when a category is clicked, similar to Screenshot (488).jpg */}
-            {activeCategory?.id === cat.id && (
-              <div className="absolute top-0 left-full w-64 bg-white border border-gray-100 shadow-xl z-50 min-h-full animate-in slide-in-from-left-2 duration-200">
-                <div className="p-4 border-b border-gray-50 flex justify-between items-center bg-gray-50">
-                  <span className="font-bold text-xs uppercase text-yellow-700">{activeCategory.name}</span>
-                  <button onClick={() => setActiveCategory(null)}>
-                    <X size={14} className="text-gray-400 hover:text-red-500" />
-                  </button>
+            {/* Flyout Submenu */}
+            {hoveredCat?.name === cat.name && (
+              <div className="absolute left-full top-0 w-64 bg-white shadow-2xl border border-gray-100 z-[100] min-h-full p-6 animate-in fade-in slide-in-from-left-2 duration-200">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="font-black text-[#d48806] uppercase text-[10px] tracking-widest">{cat.name}</h3>
+                  <X size={14} className="text-gray-300 hover:text-red-500 cursor-pointer" />
                 </div>
-                <ul className="py-2">
-                  {activeCategory.subCategories.map((sub, index) => (
+                <ul className="space-y-4">
+                  {cat.sub.map(item => (
                     <li 
-                      key={index}
-                      className="px-6 py-2.5 text-[13px] text-gray-600 hover:text-yellow-600 hover:bg-yellow-50 cursor-pointer transition-colors border-b border-transparent"
+                      key={item} 
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevents the parent category click from firing
+                        setActiveCategory(item); // Updates the filter to specific sub-category
+                      }}
+                      className={`text-[13px] transition-all cursor-pointer hover:text-yellow-600 hover:translate-x-1
+                        ${activeCategory === item ? 'text-yellow-600 font-bold italic' : 'text-gray-600'}`}
                     >
-                      {sub}
+                      {item}
                     </li>
                   ))}
                 </ul>
               </div>
             )}
-          </div>
+          </li>
         ))}
-      </nav>
-      
-      {/* Overlay to close when clicking outside on mobile/narrower views */}
-      {activeCategory && (
-        <div 
-          className="fixed inset-0 z-40 bg-transparent" 
-          onClick={() => setActiveCategory(null)}
-        />
-      )}
+      </ul>
     </div>
   );
 }
