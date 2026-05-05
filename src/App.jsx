@@ -16,7 +16,7 @@ import SignUp from './features/auth/SignUp';
 import Dashboard from './pages/admin/Dashboard';
 import Inventory from './pages/admin/Inventory';
 import Wishlist from './pages/Wishlist';
-
+import PendingApproval from './pages/PendingApproval';
 // Security
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -33,7 +33,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<SignUp />} />
           <Route path="wishlist" element={<Wishlist />} />
-          
+          <Route path="/pending-approval" element={<PendingApproval />} />
           <Route 
             path="cart" 
             element={

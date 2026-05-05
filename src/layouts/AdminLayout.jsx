@@ -22,7 +22,8 @@ const AdminLayout = () => {
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 z-10 shadow-sm">
           <div>
             <h1 className="text-xl font-black text-slate-900 tracking-tight uppercase">
-              {user.role === 'admin' ? 'Admin Portal' : 'Vendor Portal'}
+             {user.role === 'admin' ? 'Admin Portal' : 'Vendor Portal'}  
+            
             </h1>
             <p className="text-[10px] font-bold text-yellow-600 tracking-widest -mt-1">
               TANAGEBEYA BAHIR DAR

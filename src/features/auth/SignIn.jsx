@@ -27,9 +27,8 @@ export default function Login() {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
 
-        const role = response.data.user.role; // Expecting 'admin', 'vendor', or 'customer'
+        const role = response.data.user.role; 
 
-        // MATCHING THE ROUTES IN APP.JSX
         if (role === 'admin') {
           navigate('/admin/dashboard');
         } else if (role === 'vendor') {
@@ -61,6 +60,7 @@ export default function Login() {
             </div>
           )}
 
+          {/* Email Field */}
           <div className="space-y-1">
             <label className="text-[10px] font-bold uppercase text-gray-400 ml-1">Email Address</label>
             <div className="flex items-center border-2 border-gray-100 bg-gray-50 rounded-2xl focus-within:border-yellow-500 focus-within:bg-white transition-all">
@@ -75,6 +75,7 @@ export default function Login() {
             </div>
           </div>
 
+          {/* Password Field */}
           <div className="space-y-1">
             <label className="text-[10px] font-bold uppercase text-gray-400 ml-1">Password</label>
             <div className="relative flex items-center border-2 border-gray-100 bg-gray-50 rounded-2xl focus-within:border-yellow-500 focus-within:bg-white transition-all">
@@ -94,15 +95,35 @@ export default function Login() {
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
+            
+            {/* FORGOT PASSWORD - Positioned Under Password Bar */}
+            <div className="flex justify-end mt-1 px-1">
+              <Link 
+                to="/forgot-password" 
+                className="text-[10px] font-bold text-yellow-600 hover:text-yellow-700 uppercase tracking-wider transition-colors"
+              >
+                Forgot Password?
+              </Link>
+            </div>
           </div>
 
-          <div className="flex gap-4 pt-4">
-            <button type="button" onClick={handleClear} className="flex-1 py-4 rounded-2xl text-sm font-bold text-gray-500 bg-gray-50 hover:bg-gray-100 flex items-center justify-center gap-2">
+          <div className="flex gap-4 pt-2">
+            <button type="button" onClick={handleClear} className="flex-1 py-4 rounded-2xl text-sm font-bold text-gray-500 bg-gray-50 hover:bg-gray-100 flex items-center justify-center gap-2 transition-all">
               <Eraser size={18} /> CLEAR
             </button>
-            <button type="submit" disabled={isSubmitting} className="flex-[2] py-4 rounded-2xl text-sm font-black text-slate-900 bg-yellow-500 hover:bg-yellow-400 shadow-lg flex items-center justify-center gap-2 uppercase tracking-wider">
+            <button type="submit" disabled={isSubmitting} className="flex-[2] py-4 rounded-2xl text-sm font-black text-slate-900 bg-yellow-500 hover:bg-yellow-400 shadow-lg flex items-center justify-center gap-2 uppercase tracking-wider transition-all disabled:opacity-50">
               {isSubmitting ? <div className="w-5 h-5 border-2 border-slate-900 border-t-transparent rounded-full animate-spin" /> : <><LogIn size={18} /> LOGIN</>}
             </button>
+          </div>
+
+          {/* Signup Link */}
+          <div className="pt-6 border-t border-gray-100 text-center">
+            <p className="text-gray-400 text-xs font-medium">
+              Don't have an account?{' '}
+              <Link to="/signup" className="text-yellow-600 font-black uppercase tracking-widest hover:text-yellow-700 transition-colors ml-1">
+                Sign Up
+              </Link>
+            </p>
           </div>
         </form>
       </div>
